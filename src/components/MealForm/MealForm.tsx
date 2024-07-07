@@ -6,6 +6,7 @@ import {
   DatePicker,
   Form,
   FormProps,
+  message,
   Tag,
 } from 'antd';
 import { IMeal, IMealMutation } from '../../types';
@@ -35,7 +36,9 @@ export const MealForm = () => {
         };
 
         await axiosApi.post<IMeal>('/meals.json', data);
+        message.success('New meal successfully added.', 1);
       } catch (error) {
+        message.error('Sorry, there was an unexpected error creating meal', 2);
         console.error(error);
       } finally {
         form.resetFields();
