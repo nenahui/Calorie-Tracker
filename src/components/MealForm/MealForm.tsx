@@ -53,49 +53,58 @@ export const MealForm = () => {
       form={form}
       onFinish={onCreate}
       initialValues={initialValues}
-      className={'d-flex flex-column gap-4'}
       autoComplete='off'
     >
       <Typography.Text>Add new meal</Typography.Text>
 
-      <Form.Item
-        layout={'vertical'}
-        label={<Tag>Meal Type</Tag>}
-        name='mealTime'
-      >
-        <Select
-          options={[
-            { value: 'breakfast', label: 'Breakfast' },
-            { value: 'snack', label: 'Snack' },
-            { value: 'lunch', label: 'Lunch' },
-            { value: 'dinner', label: 'Dinner' },
-          ]}
-        />
-      </Form.Item>
+      <div className={'d-flex flex-column gap-4 mt-2'}>
+        <Form.Item
+          layout={'vertical'}
+          className={'m-0'}
+          label={<Tag>Meal Type</Tag>}
+          name='mealTime'
+        >
+          <Select
+            options={[
+              { value: 'breakfast', label: 'Breakfast' },
+              { value: 'snack', label: 'Snack' },
+              { value: 'lunch', label: 'Lunch' },
+              { value: 'dinner', label: 'Dinner' },
+            ]}
+          />
+        </Form.Item>
 
-      <Form.Item
-        label={<Tag>Description</Tag>}
-        name='description'
-        layout={'vertical'}
-      >
-        <Input required />
-      </Form.Item>
+        <Form.Item
+          label={<Tag>Description</Tag>}
+          name='description'
+          className={'m-0'}
+          layout={'vertical'}
+        >
+          <Input required />
+        </Form.Item>
 
-      <Form.Item
-        label={<Tag>Calories</Tag>}
-        name='calories'
-        layout={'vertical'}
-      >
-        <Input required />
-      </Form.Item>
+        <Form.Item
+          label={<Tag>Calories</Tag>}
+          name='calories'
+          className={'m-0'}
+          layout={'vertical'}
+        >
+          <Input required />
+        </Form.Item>
 
-      <Form.Item label={<Tag>Date</Tag>} name='date' layout={'vertical'}>
-        <DatePicker showNow mode={'date'} style={{ width: '100%' }} />
-      </Form.Item>
+        <Form.Item
+          label={<Tag>Date</Tag>}
+          name='date'
+          layout={'vertical'}
+          className={'m-0'}
+        >
+          <DatePicker showNow mode={'date'} style={{ width: '100%' }} />
+        </Form.Item>
 
-      <Button type={'primary'} htmlType={'submit'} disabled={isCreating}>
-        Add Meal
-      </Button>
+        <Button type={'primary'} htmlType={'submit'} disabled={isCreating}>
+          Add Meal
+        </Button>
+      </div>
     </Form>
   );
 };

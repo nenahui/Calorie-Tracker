@@ -10,7 +10,7 @@ type MenuItem = Required<MenuProps>['items'][number];
 const items: MenuItem[] = [
   {
     label: (
-      <Link to='/' className={'link'}>
+      <Link to='/' className={'link small'}>
         Home
       </Link>
     ),
@@ -19,7 +19,7 @@ const items: MenuItem[] = [
   },
   {
     label: (
-      <Link to={'/meals/add'} className={'link'}>
+      <Link to={'/meals/add'} className={'link small'}>
         New Meal
       </Link>
     ),
@@ -39,7 +39,7 @@ export const Header = () => {
 
   return (
     <header
-      className={'d-flex align-items-center justify-content-between gap-3 mb-2'}
+      className={'d-flex align-items-center justify-content-between gap-2 mb-2'}
     >
       <Link to='/' className={'link'}>
         <Title
@@ -52,12 +52,13 @@ export const Header = () => {
             src={'/logo.svg'}
             alt={'Tracker logo'}
           />
-          Cal. Tracker
+          Tracker
         </Title>
       </Link>
 
       <Menu
         onClick={onClick}
+        className={'flex-grow-1 justify-content-end'}
         selectedKeys={[currentPage]}
         mode='horizontal'
         items={items}
