@@ -1,0 +1,19 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+.container {
+    max-width: 400px !important;
+    margin: 0 auto !important;
+    padding: 10px 20px !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.link {
+    text-decoration: none;
+}
