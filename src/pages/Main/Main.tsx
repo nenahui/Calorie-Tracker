@@ -1,8 +1,9 @@
-import { Card, message, Skeleton, Typography } from 'antd';
+import { Card, message, Skeleton, Spin, Typography } from 'antd';
 import { Meal } from '../../components/Meal/Meal';
 import { useCallback, useEffect, useState } from 'react';
 import { IApiMeal } from '../../types';
 import { axiosApi } from '../../axiosApi';
+import { motion } from 'framer-motion';
 
 export const Main = () => {
   const [meals, setMeals] = useState<IApiMeal[]>([]);
@@ -48,34 +49,37 @@ export const Main = () => {
 
   const loadingCard = (
     <>
-      <Card>
-        <Skeleton loading={isLoading}>Loading...</Skeleton>
-      </Card>
-      <Card>
-        <Skeleton loading={isLoading}>Loading...</Skeleton>
-      </Card>
-      <Card>
-        <Skeleton loading={isLoading}>Loading...</Skeleton>
-      </Card>
+      <Skeleton loading={isLoading}>
+        <Card>Loading...</Card>
+      </Skeleton>
+      <Skeleton loading={isLoading}>
+        <Card>Loading...</Card>
+      </Skeleton>
+      <Skeleton loading={isLoading}>
+        <Card>Loading...</Card>
+      </Skeleton>
     </>
   );
 
   return (
-    <main className={'d-flex flex-column'}>
-      <div className={'d-flex align-items-center justify-content-between'}>
-        <Typography.Text>Meals</Typography.Text>
-        <Typography.Text>
-          Total calories: {totalPrice()}&nbsp;
-          <Typography.Text type={'secondary'}>kcal</Typography.Text>
-        </Typography.Text>
-      </div>
-      <div className={'d-flex flex-column gap-2 mt-2'}>
-        {isLoading
-          ? loadingCard
-          : meals.map((meal) => (
-              <Meal deleteMeal={deleteMeal} meal={meal} key={meal.id} />
-            ))}
-      </div>
-    </main>
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+      <main className={'d-flex flex-column'}>
+        <div className={'d-flex align-items-center justify-content-between'}>
+          <Typography.Text>Meals</Typography.Text>
+          <Typography.Text>
+            Total calories: {isLoading ? <Spin size={'small'} /> : totalPrice()}
+            &nbsp;
+            <Typography.Text type={'secondary'}>kcal</Typography.Text>
+          </Typography.Text>
+        </div>
+        <div className={'d-flex flex-column gap-2 mt-2'}>
+          {isLoading
+            ? loadingCard
+            : meals.map((meal) => (
+                <Meal deleteMeal={deleteMeal} meal={meal} key={meal.id} />
+              ))}
+        </div>
+      </main>
+    </motion.div>
   );
 };

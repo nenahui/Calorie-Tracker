@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Typography } from 'antd';
 import type { MenuProps } from 'antd';
 import { HomeOutlined, PlusCircleOutlined } from '@ant-design/icons';
@@ -10,18 +9,17 @@ type MenuItem = Required<MenuProps>['items'][number];
 const items: MenuItem[] = [
   {
     label: (
-      <Link to='/' className={'link small'}>
-        Home
-      </Link>
+      <NavLink to='/' className={'link'}>
+        <HomeOutlined />
+      </NavLink>
     ),
     key: 'home',
-    icon: <HomeOutlined />,
   },
   {
     label: (
-      <Link to={'/meals/add'} className={'link small'}>
+      <NavLink to={'/meals/add'} className={'link'}>
         New Meal
-      </Link>
+      </NavLink>
     ),
     key: 'new-meal',
     icon: <PlusCircleOutlined />,
@@ -31,37 +29,19 @@ const items: MenuItem[] = [
 const { Title } = Typography;
 
 export const Header = () => {
-  const [currentPage, setCurrentPage] = useState('home');
-
-  const onClick: MenuProps['onClick'] = (e) => {
-    setCurrentPage(e.key);
-  };
-
   return (
     <header
-      className={'d-flex align-items-center justify-content-between gap-2 mb-2'}
+      className={'d-flex align-items-center justify-content-between mb-2'}
     >
-      <Link to='/' className={'link'}>
-        <Title
-          level={5}
-          className={'m-0 text-nowrap fw-medium d-flex align-items-center'}
-        >
-          <img
-            width={'35'}
-            className={'me-2'}
-            src={'/logo.svg'}
-            alt={'Tracker logo'}
-          />
-          Tracker
-        </Title>
-      </Link>
+      <Title level={5} className={'m-0 fw-medium'}>
+        Calorie Tracker
+      </Title>
 
       <Menu
-        onClick={onClick}
-        className={'flex-grow-1 justify-content-end'}
-        selectedKeys={[currentPage]}
         mode='horizontal'
         items={items}
+        defaultSelectedKeys={['home']}
+        className={'flex-grow-1 border-0 justify-content-end'}
       />
     </header>
   );
