@@ -1,3 +1,5 @@
+import { MealForm } from '../../components/MealForm/MealForm';
+
 export const NewMeal = () => {
-  return <>New meal page</>;
+  return <MealForm />;
 };
