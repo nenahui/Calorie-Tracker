@@ -6,6 +6,7 @@ import {
   DatePicker,
   Form,
   FormProps,
+  Tag,
 } from 'antd';
 import { IMeal, IMealMutation } from '../../types';
 import dayjs from 'dayjs';
@@ -49,12 +50,16 @@ export const MealForm = () => {
       form={form}
       onFinish={onCreate}
       initialValues={initialValues}
-      className={'d-flex flex-column gap-3'}
+      className={'d-flex flex-column gap-4'}
       autoComplete='off'
     >
       <Typography.Text>Add new meal</Typography.Text>
 
-      <Form.Item layout={'vertical'} label='Meal Type' name='mealTime'>
+      <Form.Item
+        layout={'vertical'}
+        label={<Tag>Meal Type</Tag>}
+        name='mealTime'
+      >
         <Select
           options={[
             { value: 'breakfast', label: 'Breakfast' },
@@ -66,19 +71,22 @@ export const MealForm = () => {
       </Form.Item>
 
       <Form.Item
-        label='Description'
+        label={<Tag>Description</Tag>}
         name='description'
         layout={'vertical'}
-        required
       >
-        <Input />
+        <Input required />
       </Form.Item>
 
-      <Form.Item label='Calories' name='calories' layout={'vertical'} required>
-        <Input />
+      <Form.Item
+        label={<Tag>Calories</Tag>}
+        name='calories'
+        layout={'vertical'}
+      >
+        <Input required />
       </Form.Item>
 
-      <Form.Item label='Date' name='date' layout={'vertical'} required>
+      <Form.Item label={<Tag>Date</Tag>} name='date' layout={'vertical'}>
         <DatePicker showNow mode={'date'} style={{ width: '100%' }} />
       </Form.Item>
 
