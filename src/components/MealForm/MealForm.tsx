@@ -15,7 +15,7 @@ import { useCallback, useState } from 'react';
 import { axiosApi } from '../../axiosApi';
 
 const initialValues: IMealMutation = {
-  date: dayjs(new Date().toISOString()),
+  date: dayjs(new Date()),
   description: '',
   calories: '',
   mealTime: 'breakfast',
