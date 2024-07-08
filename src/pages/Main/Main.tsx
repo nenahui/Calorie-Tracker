@@ -1,9 +1,10 @@
-import { Card, message, Skeleton, Spin, Typography } from 'antd';
+import { Flex, message, Spin, Typography } from 'antd';
 import { Meal } from '../../components/Meal/Meal';
 import { useCallback, useEffect, useState } from 'react';
 import { IApiMeal } from '../../types';
 import { axiosApi } from '../../axiosApi';
 import { motion } from 'framer-motion';
+import { SkeletonCards } from '../../components/SkeletonCards/SkeletonCards';
 
 export const Main = () => {
   const [meals, setMeals] = useState<IApiMeal[]>([]);
@@ -12,11 +13,13 @@ export const Main = () => {
   const fetchMeals = useCallback(async () => {
     try {
       setIsLoading(true);
+
       const { data } = await axiosApi.get('/meals.json');
       const mealsResponse = Object.keys(data).map((id: string) => ({
         ...data[id],
         id,
       }));
+
       setMeals(mealsResponse);
     } finally {
       setIsLoading(false);
@@ -32,6 +35,7 @@ export const Main = () => {
       try {
         await axiosApi.delete(`/meals/${id}.json`);
         message.success('Meal successfully deleted.', 1);
+
         void fetchMeals();
       } catch (error) {
         console.error(error);
@@ -47,39 +51,32 @@ export const Main = () => {
     return meals.reduce((sum, meal) => sum + meal.calories, 0);
   };
 
-  const loadingCard = (
-    <>
-      <Skeleton loading={isLoading}>
-        <Card>Loading...</Card>
-      </Skeleton>
-      <Skeleton loading={isLoading}>
-        <Card>Loading...</Card>
-      </Skeleton>
-      <Skeleton loading={isLoading}>
-        <Card>Loading...</Card>
-      </Skeleton>
-    </>
-  );
+  const total = isLoading ? <Spin size={'small'} /> : totalPrice();
+
+  const mealsElements = meals.map((meal) => (
+    <Meal deleteMeal={deleteMeal} meal={meal} key={meal.id} />
+  ));
 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-      <main className={'d-flex flex-column'}>
-        <div className={'d-flex align-items-center justify-content-between'}>
+      <Flex justify={'space-between'} vertical>
+        <Flex justify={'space-between'} align={'center'} className={'mb-10'}>
           <Typography.Text>Meals</Typography.Text>
+
           <Typography.Text>
-            Total calories: {isLoading ? <Spin size={'small'} /> : totalPrice()}
-            &nbsp;
-            <Typography.Text type={'secondary'}>kcal</Typography.Text>
+            Total calories: {total}
+            <Typography.Text type={'secondary'}> kcal</Typography.Text>
           </Typography.Text>
-        </div>
-        <div className={'d-flex flex-column gap-2 mt-2'}>
-          {isLoading
-            ? loadingCard
-            : meals.map((meal) => (
-                <Meal deleteMeal={deleteMeal} meal={meal} key={meal.id} />
-              ))}
-        </div>
-      </main>
+        </Flex>
+
+        <Flex justify={'space-between'} gap={'middle'} vertical>
+          {isLoading ? (
+            <SkeletonCards isLoading={isLoading} amount={3} />
+          ) : (
+            mealsElements
+          )}
+        </Flex>
+      </Flex>
     </motion.div>
   );
 };

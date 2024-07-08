@@ -7,7 +7,7 @@ import {
   Form,
   FormProps,
   message,
-  Tag,
+  Flex,
 } from 'antd';
 import { IMeal, IMealMutation } from '../../types';
 import dayjs from 'dayjs';
@@ -55,14 +55,14 @@ export const MealForm = () => {
       initialValues={initialValues}
       autoComplete='off'
     >
-      <Typography.Text>Add new meal</Typography.Text>
+      <Typography.Text type={'secondary'}>Add new meal</Typography.Text>
 
-      <div className={'d-flex flex-column gap-4 mt-2'}>
+      <Flex vertical>
         <Form.Item
           layout={'vertical'}
-          className={'m-0'}
-          label={<Tag>Meal Type</Tag>}
+          label='Meal Type'
           name='mealTime'
+          className={'mb-10'}
         >
           <Select
             options={[
@@ -75,28 +75,28 @@ export const MealForm = () => {
         </Form.Item>
 
         <Form.Item
-          label={<Tag>Description</Tag>}
+          label='Description'
           name='description'
-          className={'m-0'}
           layout={'vertical'}
+          className={'mb-10'}
         >
           <Input required />
         </Form.Item>
 
         <Form.Item
-          label={<Tag>Calories</Tag>}
+          label='Calories'
           name='calories'
-          className={'m-0'}
           layout={'vertical'}
+          className={'mb-10'}
         >
           <Input required />
         </Form.Item>
 
         <Form.Item
-          label={<Tag>Date</Tag>}
+          label='Date'
           name='date'
           layout={'vertical'}
-          className={'m-0'}
+          className={'mb-10'}
         >
           <DatePicker showNow mode={'date'} style={{ width: '100%' }} />
         </Form.Item>
@@ -104,7 +104,7 @@ export const MealForm = () => {
         <Button type={'primary'} htmlType={'submit'} disabled={isCreating}>
           Add Meal
         </Button>
-      </div>
+      </Flex>
     </Form>
   );
 };
