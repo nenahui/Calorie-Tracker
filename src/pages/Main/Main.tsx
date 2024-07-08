@@ -6,6 +6,7 @@ import { axiosApi } from '../../axiosApi';
 import { motion } from 'framer-motion';
 import { SkeletonCards } from '../../components/SkeletonCards/SkeletonCards';
 import { Link } from 'react-router-dom';
+import SORT from 'lodash';
 
 export const Main = () => {
   const [meals, setMeals] = useState<IApiMeal[]>([]);
@@ -21,7 +22,8 @@ export const Main = () => {
         id,
       }));
 
-      setMeals(mealsResponse);
+      const sortedMeals = SORT.orderBy(mealsResponse, ['date'], ['desc']);
+      setMeals(sortedMeals);
     } finally {
       setIsLoading(false);
     }
