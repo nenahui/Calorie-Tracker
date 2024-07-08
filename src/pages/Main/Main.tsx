@@ -1,10 +1,11 @@
-import { Flex, message, Spin, Typography } from 'antd';
+import { Button, Flex, message, Spin, Typography } from 'antd';
 import { Meal } from '../../components/Meal/Meal';
 import { useCallback, useEffect, useState } from 'react';
 import { IApiMeal } from '../../types';
 import { axiosApi } from '../../axiosApi';
 import { motion } from 'framer-motion';
 import { SkeletonCards } from '../../components/SkeletonCards/SkeletonCards';
+import { Link } from 'react-router-dom';
 
 export const Main = () => {
   const [meals, setMeals] = useState<IApiMeal[]>([]);
@@ -61,12 +62,14 @@ export const Main = () => {
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
       <Flex justify={'space-between'} vertical>
         <Flex justify={'space-between'} align={'center'} className={'mb-10'}>
-          <Typography.Text>Meals</Typography.Text>
-
           <Typography.Text>
             Total calories: {total}
             <Typography.Text type={'secondary'}> kcal</Typography.Text>
           </Typography.Text>
+
+          <Link to='/meals/add'>
+            <Button type={'primary'}>Add new meal</Button>
+          </Link>
         </Flex>
 
         <Flex justify={'space-between'} gap={'middle'} vertical>

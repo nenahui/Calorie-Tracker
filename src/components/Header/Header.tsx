@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { Flex, Typography } from 'antd';
 import type { MenuProps } from 'antd';
 import { HomeOutlined, PlusCircleOutlined } from '@ant-design/icons';
@@ -32,9 +32,11 @@ export const Header = () => {
   return (
     <header className={'mb-10'}>
       <Flex justify={'space-between'} align={'center'}>
-        <Title level={5} className={'logo'}>
-          Calorie Tracker
-        </Title>
+        <Link to='/'>
+          <Title level={5} className={'logo'}>
+            Calorie Tracker
+          </Title>
+        </Link>
 
         <Menu mode='horizontal' items={items} defaultSelectedKeys={['home']} />
       </Flex>

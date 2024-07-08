@@ -41,7 +41,7 @@ export const Meal: React.FC<Props> = ({ meal, deleteMeal }) => {
 
             <Flex justify={'space-between'}>
               <motion.div whileTap={{ scale: 0.95 }}>
-                <Link to='/'>
+                <Link to={`/meals/${meal.id}/edit`}>
                   <Button size={'small'} type={'link'} icon={<FormOutlined />}>
                     Edit
                   </Button>

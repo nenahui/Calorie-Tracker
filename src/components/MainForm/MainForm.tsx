@@ -7,57 +7,92 @@ import {
   Form,
   FormProps,
   message,
-  Flex,
 } from 'antd';
 import { IMeal, IMealMutation } from '../../types';
 import dayjs from 'dayjs';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { axiosApi } from '../../axiosApi';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const initialValues: IMealMutation = {
-  date: dayjs(new Date()),
-  description: '',
-  calories: '',
-  mealTime: 'breakfast',
-};
-
-export const MealForm = () => {
+export const MainForm = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
   const [form] = Form.useForm();
-  const [isCreating, setIsCreating] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [initialValues, setInitialValues] = useState<IMealMutation>({
+    date: dayjs(new Date()),
+    description: '',
+    calories: '',
+    mealTime: 'breakfast',
+  });
 
-  const onCreate: FormProps<IMealMutation>['onFinish'] = useCallback(
+  const fetchValues = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await axiosApi.get(`/meals/${id}.json`);
+      console.log(data);
+      if (data) {
+        setInitialValues(data);
+        form.setFieldsValue({
+          ...data,
+          date: dayjs(data.date),
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      message.error('An error occurred while retrieving meal data', 2);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [id, form]);
+
+  useEffect(() => {
+    if (id) void fetchValues();
+  }, [fetchValues, id]);
+
+  const onSubmit: FormProps<IMealMutation>['onFinish'] = useCallback(
     async (values: IMealMutation) => {
       try {
-        setIsCreating(true);
+        setIsLoading(true);
         const data = {
           ...values,
           calories: parseFloat(values.calories),
           date: values.date.toISOString(),
         };
 
-        await axiosApi.post<IMeal>('/meals.json', data);
-        message.success('New meal successfully added.', 1);
+        if (id) {
+          await axiosApi.put(`/meals/${id}.json`, data);
+        } else {
+          await axiosApi.post<IMeal>('/meals.json', data);
+        }
+        message.success(
+          id
+            ? 'Meal has been edited successfully'
+            : 'New meal successfully added.',
+          1
+        );
+        navigate('/');
       } catch (error) {
         message.error('Sorry, there was an unexpected error creating meal', 2);
         console.error(error);
       } finally {
         form.resetFields();
-        setIsCreating(false);
+        setIsLoading(false);
       }
     },
-    [form]
+    [form, id, navigate]
   );
 
   return (
     <Form
       form={form}
-      onFinish={onCreate}
+      onFinish={onSubmit}
       initialValues={initialValues}
       autoComplete='off'
     >
       <Typography.Text type={'secondary'}>Add new meal</Typography.Text>
 
-      <Flex vertical>
+      <div className={'d-flex flex-column gap-2 mt-2'}>
         <Form.Item
           layout={'vertical'}
           label='Meal Type'
@@ -101,10 +136,15 @@ export const MealForm = () => {
           <DatePicker showNow mode={'date'} style={{ width: '100%' }} />
         </Form.Item>
 
-        <Button type={'primary'} htmlType={'submit'} disabled={isCreating}>
-          Add Meal
+        <Button
+          loading={isLoading}
+          type={'primary'}
+          htmlType={'submit'}
+          disabled={isLoading}
+        >
+          {id ? 'Edit Meal' : 'Add Meal'}
         </Button>
-      </Flex>
+      </div>
     </Form>
   );
 };
