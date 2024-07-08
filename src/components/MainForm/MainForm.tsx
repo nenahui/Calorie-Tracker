@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { axiosApi } from '../../axiosApi';
 import { useNavigate, useParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 export const MainForm = () => {
   const navigate = useNavigate();
@@ -90,60 +91,98 @@ export const MainForm = () => {
       initialValues={initialValues}
       autoComplete='off'
     >
-      <Typography.Text type={'secondary'}>Add new meal</Typography.Text>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className={'mb-10'}
+      >
+        <Typography.Text type={'secondary'}>Add new meal</Typography.Text>
+      </motion.div>
 
       <div className={'d-flex flex-column gap-2 mt-2'}>
-        <Form.Item
-          layout={'vertical'}
-          label='Meal Type'
-          name='mealTime'
-          className={'mb-10'}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
         >
-          <Select
-            options={[
-              { value: 'breakfast', label: 'Breakfast' },
-              { value: 'snack', label: 'Snack' },
-              { value: 'lunch', label: 'Lunch' },
-              { value: 'dinner', label: 'Dinner' },
-            ]}
-          />
-        </Form.Item>
+          <Form.Item
+            layout={'vertical'}
+            label='Meal Type'
+            name='mealTime'
+            className={'mb-10'}
+          >
+            <Select
+              options={[
+                { value: 'breakfast', label: 'Breakfast' },
+                { value: 'snack', label: 'Snack' },
+                { value: 'lunch', label: 'Lunch' },
+                { value: 'dinner', label: 'Dinner' },
+              ]}
+            />
+          </Form.Item>
+        </motion.div>
 
-        <Form.Item
-          label='Description'
-          name='description'
-          layout={'vertical'}
-          className={'mb-10'}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
         >
-          <Input required />
-        </Form.Item>
+          <Form.Item
+            label='Description'
+            name='description'
+            layout={'vertical'}
+            className={'mb-10'}
+          >
+            <Input required />
+          </Form.Item>
+        </motion.div>
 
-        <Form.Item
-          label='Calories'
-          name='calories'
-          layout={'vertical'}
-          className={'mb-10'}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.3 }}
         >
-          <Input required />
-        </Form.Item>
+          <Form.Item
+            label='Calories'
+            name='calories'
+            layout={'vertical'}
+            className={'mb-10'}
+          >
+            <Input required />
+          </Form.Item>
+        </motion.div>
 
-        <Form.Item
-          label='Date'
-          name='date'
-          layout={'vertical'}
-          className={'mb-10'}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.4 }}
         >
-          <DatePicker showNow mode={'date'} style={{ width: '100%' }} />
-        </Form.Item>
+          <Form.Item
+            label='Date'
+            name='date'
+            layout={'vertical'}
+            className={'mb-10'}
+          >
+            <DatePicker showNow mode={'date'} style={{ width: '100%' }} />
+          </Form.Item>
+        </motion.div>
 
-        <Button
-          loading={isLoading}
-          type={'primary'}
-          htmlType={'submit'}
-          disabled={isLoading}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.5 }}
         >
-          {id ? 'Edit Meal' : 'Add Meal'}
-        </Button>
+          <Button
+            loading={isLoading}
+            type={'primary'}
+            htmlType={'submit'}
+            disabled={isLoading}
+            style={{ width: '100%' }}
+          >
+            {id ? 'Edit Meal' : 'Add Meal'}
+          </Button>
+        </motion.div>
       </div>
     </Form>
   );

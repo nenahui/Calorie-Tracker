@@ -7,6 +7,9 @@ import { motion } from 'framer-motion';
 import { SkeletonCards } from '../../components/SkeletonCards/SkeletonCards';
 import { Link } from 'react-router-dom';
 import SORT from 'lodash';
+import { format } from 'date-fns';
+
+const currentDate = format(new Date(), 'dd-MM-yy');
 
 export const Main = () => {
   const [meals, setMeals] = useState<IApiMeal[]>([]);
@@ -51,37 +54,54 @@ export const Main = () => {
   );
 
   const totalPrice = () => {
-    return meals.reduce((sum, meal) => sum + meal.calories, 0);
+    return meals
+      .filter(
+        (meal) => format(meal.date.toString(), 'dd-MM-yy') === currentDate
+      )
+      .reduce((sum, meal) => sum + meal.calories, 0);
   };
 
-  const total = isLoading ? <Spin size={'small'} /> : totalPrice();
+  const total = isLoading ? (
+    <Spin size={'small'} />
+  ) : (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      {totalPrice()}
+    </motion.div>
+  );
 
-  const mealsElements = meals.map((meal) => (
-    <Meal deleteMeal={deleteMeal} meal={meal} key={meal.id} />
+  const mealsElements = meals.map((meal, index) => (
+    <motion.div
+      key={meal.id}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: index * 0.1 }}
+    >
+      <Meal deleteMeal={deleteMeal} meal={meal} />
+    </motion.div>
   ));
 
   return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-      <Flex justify={'space-between'} vertical>
-        <Flex justify={'space-between'} align={'center'} className={'mb-10'}>
-          <Typography.Text>
+    <Flex justify={'space-between'} vertical>
+      <Flex justify={'space-between'} align={'center'} className={'mb-10'}>
+        <Typography.Text>
+          <Flex gap={'small'}>
             Total calories: {total}
             <Typography.Text type={'secondary'}> kcal</Typography.Text>
-          </Typography.Text>
+          </Flex>
+        </Typography.Text>
 
-          <Link to='/meals/add'>
-            <Button type={'primary'}>Add new meal</Button>
-          </Link>
-        </Flex>
-
-        <Flex justify={'space-between'} gap={'middle'} vertical>
-          {isLoading ? (
-            <SkeletonCards isLoading={isLoading} amount={3} />
-          ) : (
-            mealsElements
-          )}
-        </Flex>
+        <Link to='/meals/add'>
+          <Button type={'primary'}>Add new meal</Button>
+        </Link>
       </Flex>
-    </motion.div>
+
+      <Flex justify={'space-between'} gap={'middle'} vertical>
+        {isLoading ? (
+          <SkeletonCards isLoading={isLoading} amount={2} />
+        ) : (
+          mealsElements
+        )}
+      </Flex>
+    </Flex>
   );
 };
