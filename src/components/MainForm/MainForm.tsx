@@ -69,13 +69,13 @@ export const MainForm = () => {
         } else {
           await axiosApi.post('/meals.json', data);
           message.success('New meal successfully added.', 1);
+          navigate('/');
         }
-        navigate('/');
       } catch (error) {
         message.error('Sorry, there was an unexpected error creating meal', 2);
         console.error(error);
       } finally {
-        form.resetFields();
+        if (!id) form.resetFields();
         setIsLoading(false);
       }
     },
