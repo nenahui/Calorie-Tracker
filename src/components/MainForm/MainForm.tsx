@@ -5,7 +5,6 @@ import {
   Button,
   DatePicker,
   Form,
-  FormProps,
   message,
   InputNumber,
 } from 'antd';
@@ -32,7 +31,6 @@ export const MainForm = () => {
     try {
       setIsLoading(true);
       const { data } = await axiosApi.get<IMeal>(`/meals/${id}.json`);
-      console.log(data);
       if (data) {
         setInitialValues({
           ...data,
@@ -55,7 +53,7 @@ export const MainForm = () => {
     if (id) void fetchValues();
   }, [fetchValues, id]);
 
-  const onSubmit: FormProps<IMealMutation>['onFinish'] = useCallback(
+  const onSubmit = useCallback(
     async (values: IMealMutation) => {
       try {
         setIsLoading(true);
@@ -104,7 +102,6 @@ export const MainForm = () => {
       >
         <Typography.Text type={'secondary'}>Add new meal</Typography.Text>
       </motion.div>
-
       <div className={'d-flex flex-column gap-2 mt-2'}>
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -128,7 +125,6 @@ export const MainForm = () => {
             />
           </Form.Item>
         </motion.div>
-
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -139,69 +135,61 @@ export const MainForm = () => {
             name='description'
             layout={'vertical'}
             className={'mb-10'}
-            rules={[{ required: true, message: 'Please enter a description.' }]}
+            rules={[{ required: true, message: 'Please enter description!' }]}
           >
-            <Input disabled={isLoading} />
+            <Input
+              disabled={isLoading}
+              placeholder={'Enter meal description...'}
+            />
           </Form.Item>
         </motion.div>
-
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.3 }}
         >
           <Form.Item
-            label='Calories'
-            name='calories'
+            label='Date'
+            name='date'
             layout={'vertical'}
             className={'mb-10'}
-            rules={[
-              {
-                required: true,
-                message: 'Please enter calories as numbers.',
-                min: 0,
-                type: 'number',
-              },
-            ]}
+            rules={[{ required: true, message: 'Please enter date!' }]}
           >
-            <InputNumber disabled={isLoading} style={{ width: '100%' }} />
+            <DatePicker disabled={isLoading} style={{ width: '100%' }} />
           </Form.Item>
         </motion.div>
-
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.4 }}
         >
           <Form.Item
-            label='Date'
-            name='date'
+            label='Calories'
+            name='calories'
             layout={'vertical'}
             className={'mb-10'}
-            rules={[{ required: true, message: 'Please enter date.' }]}
+            rules={[{ required: true, message: 'Please enter calories!' }]}
           >
-            <DatePicker
-              showNow
-              mode={'date'}
-              style={{ width: '100%' }}
+            <InputNumber
               disabled={isLoading}
+              placeholder={'Enter meal calories...'}
+              addonAfter={'kcal'}
+              style={{ width: '100%' }}
             />
           </Form.Item>
         </motion.div>
-
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.5 }}
         >
           <Button
-            loading={isLoading}
             type={'primary'}
             htmlType={'submit'}
-            disabled={isLoading}
+            loading={isLoading}
             style={{ width: '100%' }}
           >
-            {id ? 'Edit Meal' : 'Add Meal'}
+            {id ? 'Update meal' : 'Create a new meal'}
           </Button>
         </motion.div>
       </div>
