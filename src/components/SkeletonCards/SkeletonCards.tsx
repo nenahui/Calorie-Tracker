@@ -12,6 +12,7 @@ export const SkeletonCards: React.FC<Props> = ({ isLoading, amount }) => {
     <>
       {Array.from({ length: amount }).map((_, index) => (
         <motion.div
+          key={index}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: index * 0.1 }}

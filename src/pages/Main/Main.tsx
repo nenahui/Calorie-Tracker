@@ -1,7 +1,7 @@
 import { Button, Flex, message, Spin, Typography } from 'antd';
 import { Meal } from '../../components/Meal/Meal';
 import { useCallback, useEffect, useState } from 'react';
-import { IApiMeal } from '../../types';
+import { IApiMeal, IApiMeals } from '../../types';
 import { axiosApi } from '../../axiosApi';
 import { motion } from 'framer-motion';
 import { SkeletonCards } from '../../components/SkeletonCards/SkeletonCards';
@@ -19,11 +19,13 @@ export const Main = () => {
     try {
       setIsLoading(true);
 
-      const { data } = await axiosApi.get('/meals.json');
-      const mealsResponse = Object.keys(data).map((id: string) => ({
-        ...data[id],
-        id,
-      }));
+      const { data } = await axiosApi.get<IApiMeals>('/meals.json');
+      const mealsResponse = Object.keys(data).map(
+        (id: string): IApiMeal => ({
+          ...data[id],
+          id,
+        })
+      );
 
       const sortedMeals = SORT.orderBy(mealsResponse, ['date'], ['desc']);
       setMeals(sortedMeals);
@@ -40,7 +42,7 @@ export const Main = () => {
     async (id: string) => {
       try {
         await axiosApi.delete(`/meals/${id}.json`);
-        message.success('Meal successfully deleted.', 1);
+        message.info('Meal successfully deleted.', 1);
 
         void fetchMeals();
       } catch (error) {

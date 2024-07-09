@@ -7,6 +7,7 @@ import {
   Form,
   FormProps,
   message,
+  InputNumber,
 } from 'antd';
 import { IMeal, IMealMutation } from '../../types';
 import dayjs from 'dayjs';
@@ -30,10 +31,13 @@ export const MainForm = () => {
   const fetchValues = useCallback(async () => {
     try {
       setIsLoading(true);
-      const { data } = await axiosApi.get(`/meals/${id}.json`);
+      const { data } = await axiosApi.get<IMeal>(`/meals/${id}.json`);
       console.log(data);
       if (data) {
-        setInitialValues(data);
+        setInitialValues({
+          ...data,
+          calories: data.calories.toString(),
+        });
         form.setFieldsValue({
           ...data,
           date: dayjs(data.date),
@@ -58,13 +62,13 @@ export const MainForm = () => {
         const data = {
           ...values,
           calories: parseFloat(values.calories),
-          date: values.date.toISOString(),
+          date: values.date,
         };
 
         if (id) {
           await axiosApi.put(`/meals/${id}.json`, data);
         } else {
-          await axiosApi.post<IMeal>('/meals.json', data);
+          await axiosApi.post('/meals.json', data);
         }
         message.success(
           id
@@ -87,6 +91,7 @@ export const MainForm = () => {
   return (
     <Form
       form={form}
+      layout={'vertical'}
       onFinish={onSubmit}
       initialValues={initialValues}
       autoComplete='off'
@@ -113,6 +118,7 @@ export const MainForm = () => {
             className={'mb-10'}
           >
             <Select
+              disabled={isLoading}
               options={[
                 { value: 'breakfast', label: 'Breakfast' },
                 { value: 'snack', label: 'Snack' },
@@ -133,8 +139,9 @@ export const MainForm = () => {
             name='description'
             layout={'vertical'}
             className={'mb-10'}
+            rules={[{ required: true, message: 'Please enter a description.' }]}
           >
-            <Input required />
+            <Input disabled={isLoading} />
           </Form.Item>
         </motion.div>
 
@@ -148,8 +155,16 @@ export const MainForm = () => {
             name='calories'
             layout={'vertical'}
             className={'mb-10'}
+            rules={[
+              {
+                required: true,
+                message: 'Please enter calories as numbers.',
+                min: 0,
+                type: 'number',
+              },
+            ]}
           >
-            <Input required />
+            <InputNumber disabled={isLoading} style={{ width: '100%' }} />
           </Form.Item>
         </motion.div>
 
@@ -163,8 +178,14 @@ export const MainForm = () => {
             name='date'
             layout={'vertical'}
             className={'mb-10'}
+            rules={[{ required: true, message: 'Please enter date.' }]}
           >
-            <DatePicker showNow mode={'date'} style={{ width: '100%' }} />
+            <DatePicker
+              showNow
+              mode={'date'}
+              style={{ width: '100%' }}
+              disabled={isLoading}
+            />
           </Form.Item>
         </motion.div>
 
