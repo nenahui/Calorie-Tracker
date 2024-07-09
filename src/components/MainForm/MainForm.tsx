@@ -1,5 +1,4 @@
 import {
-  Input,
   Typography,
   Select,
   Button,
@@ -14,6 +13,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { axiosApi } from '../../axiosApi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import TextArea from 'antd/es/input/TextArea';
 
 export const MainForm = () => {
   const navigate = useNavigate();
@@ -65,15 +65,11 @@ export const MainForm = () => {
 
         if (id) {
           await axiosApi.put(`/meals/${id}.json`, data);
+          message.success('Meal has been edited successfully', 1);
         } else {
           await axiosApi.post('/meals.json', data);
+          message.success('New meal successfully added.', 1);
         }
-        message.success(
-          id
-            ? 'Meal has been edited successfully'
-            : 'New meal successfully added.',
-          1
-        );
         navigate('/');
       } catch (error) {
         message.error('Sorry, there was an unexpected error creating meal', 2);
@@ -137,7 +133,8 @@ export const MainForm = () => {
             className={'mb-10'}
             rules={[{ required: true, message: 'Please enter description!' }]}
           >
-            <Input
+            <TextArea
+              autoSize
               disabled={isLoading}
               placeholder={'Enter meal description...'}
             />
